@@ -7,6 +7,7 @@ import 'package:reel_lessons/constants/app_styles.dart';
 import 'package:reel_lessons/modules/dashboard/presentation/manager/dashboard_provider.dart';
 import 'package:reel_lessons/modules/dashboard/presentation/pages/add_feed_screen.dart';
 import 'package:chewie/chewie.dart';
+import '../../../../utils/utils.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -102,43 +103,69 @@ class HomeScreen extends StatelessWidget {
   Widget _renderVideoFeeds() {
     return Consumer<DashboardProvider>(
       builder: (context, content, child) {
-        if (content.homeComponents?.results.isEmpty ?? true) return const SizedBox();
+        if (content.homeComponents?.results.isEmpty ?? true) return const SizedBox.shrink();
 
-        return ListView.separated(
-          itemCount: content.homeComponents?.results.length ?? 0,
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final feed = content.homeComponents?.results[index];
-            final isPlaying = content.currentPlayingIndex == index;
+        return Expanded(
+          child: ListView.separated(
+            itemCount: content.homeComponents?.results.length ?? 0,
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final feed = content.homeComponents?.results[index];
+              final isPlaying = content.currentPlayingIndex == index;
+          
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Image.asset(AppResources.user, width: 35),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(feed?.user.name ?? "", style: AppTextStyles.montserratRegular(13),),
+                          Text(Utils.formatDate(feed?.createdAt ?? ""), style: AppTextStyles.montserratRegular(13),)
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      content.playVideo(index);
+                    },
+                    child: AspectRatio(
+                      aspectRatio: content.getController(index).value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (!isPlaying)
+                            Image.network(
+                              feed?.image ?? '',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
 
-            return GestureDetector(
-              onTap: () {
-                content.playVideo(index);
-              },
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (!isPlaying)
-                      Image.network(
-                        feed?.image ?? '',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
+                          if (isPlaying)
+                            Chewie(controller: content.getChewieController(index)),
+
+                          if (!isPlaying)
+                            const Icon(Icons.play_circle_fill, size: 64, color: Colors.white),
+                        ],
                       ),
-
-                    if (isPlaying)
-                      Chewie(controller: content.getChewieController(index)),
-
-                    if (!isPlaying)
-                      const Icon(Icons.play_circle_fill, size: 64, color: Colors.white),
-                  ],
-                ),
-              ),
-            );
-          }, separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10,),
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  Text(feed?.description ?? "", style: AppTextStyles.montserratRegular(13),),
+                  const SizedBox(height: 10,),
+                ],
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) => const Divider(height: 10, thickness: 5, color: AppColors.black,),
+          ),
         );
       },
     );

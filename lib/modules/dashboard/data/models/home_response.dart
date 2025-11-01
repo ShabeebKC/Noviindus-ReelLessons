@@ -45,6 +45,7 @@ class Results extends ResultEntity {
     required super.image,
     required super.video,
     required super.user,
+    required super.createdAt,
   });
 
   factory Results.fromJson(Map<String, dynamic> json) {
@@ -52,8 +53,9 @@ class Results extends ResultEntity {
       id: json['id'] ?? 0,
       description: json['description'] ?? '',
       image: json['image'] ?? '',
-      video: json['video'] ?? '',
+      video: /*json['video'] ?? ''*/ 'https://fastly.noviindusdemosites.in/private/5077072-hd_720_1366_25fps.mp4',
       user: User.fromJson(json['user']),
+      createdAt: json['created_at'] ?? '',
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:reel_lessons/modules/dashboard/domain/entities/home_entity.dart';
 import 'package:reel_lessons/modules/dashboard/domain/use_cases/dashboard_usecase.dart';
+import 'package:video_player/video_player.dart';
 import '../../data/models/categories_reponse.dart';
 
 class DashboardProvider extends ChangeNotifier{
@@ -30,11 +31,14 @@ class DashboardProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  VideoPlayerController getController(int index){
+    return dashboardUseCase.videoControllers[index];
+  }
+
   void playVideo(int index) async {
     if (_currentPlayingIndex != null && _currentPlayingIndex != index) {
       dashboardUseCase.chewieControllers[_currentPlayingIndex!].pause();
     }
-
     _currentPlayingIndex = index;
     await dashboardUseCase.videoControllers[index].initialize();
     dashboardUseCase.chewieControllers[index].play();

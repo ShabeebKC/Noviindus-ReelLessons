@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_styles.dart';
+import 'package:intl/intl.dart';
 
 class Utils{
 
@@ -19,5 +20,14 @@ class Utils{
           ),
         ))
     );
+  }
+
+  static String formatDate(String isoDate) {
+    try {
+      final dateTime = DateTime.parse(isoDate);
+      return DateFormat('d MMM yyyy').format(dateTime);
+    } catch (e) {
+      return '';
+    }
   }
 }

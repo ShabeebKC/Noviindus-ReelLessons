@@ -23,12 +23,19 @@ class DashboardUseCase{
   }
 
   void initControllers(List<ResultEntity>? results) {
-    for (final feed in results ?? <ResultEntity>[]) {
+    final List<String> videoUrls = [
+      "https://fastly.noviindusdemosites.in/private/5077072-hd_720_1366_25fps.mp4",
+      "https://fastly.noviindusdemosites.in/private/7014806-hd_720_1366_25fps.mp4",
+      "https://fastly.noviindusdemosites.in/private/8464944-hd_1280_720_25fps.mp4"
+    ];
+
+    for (final feed in videoUrls) {
       final videoController = VideoPlayerController.networkUrl(
-          Uri.parse(feed.video)
+          Uri.parse(feed)
       );
       final chewieController = ChewieController(
         videoPlayerController: videoController,
+        aspectRatio: videoController.value.aspectRatio,
         autoPlay: false,
         looping: false,
         showControls: true,

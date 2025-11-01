@@ -24,6 +24,7 @@ class ResultEntity {
   final String image;
   final String video;
   final UserEntity user;
+  final String createdAt;
 
   ResultEntity({
     required this.id,
@@ -31,6 +32,7 @@ class ResultEntity {
     required this.image,
     required this.video,
     required this.user,
+    required this.createdAt,
   });
 }
 
