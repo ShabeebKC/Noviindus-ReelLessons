@@ -6,4 +6,6 @@ class AppResources{
   static const String uploadVideo = "$svgBaseUrl/upload_video.svg";
   static const String explore = "$svgBaseUrl/explore.svg";
   static const String arrowBack = "$svgBaseUrl/arrow_back.svg";
+
+  static const String user = "$pngBaseUrl/user.png";
 }

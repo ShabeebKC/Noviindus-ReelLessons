@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reel_lessons/constants/app_colors.dart';
 import 'package:reel_lessons/constants/app_styles.dart';
-import 'package:reel_lessons/modules/dashboard/presentation/pages/add_feed_screen.dart';
+import 'package:reel_lessons/modules/dashboard/presentation/manager/dashboard_provider.dart';
+import '../../../../utils/utils.dart';
+import '../../../dashboard/presentation/pages/home_screen.dart';
+import '../manager/login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,12 +15,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController phoneController = TextEditingController(text: "8129466718");
+  final TextEditingController _phoneController = TextEditingController(text: "8129466718");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -72,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(
           width: MediaQuery.of(context).size.width / 1.5,
           child: TextFormField(
-            controller: phoneController,
+            controller: _phoneController,
             style: AppTextStyles.montserratBold(16),
             keyboardType: TextInputType.phone,
             decoration: AppInputDecorationStyles.formFieldDecoration("Enter Mobile Number", 12),
@@ -85,12 +88,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _renderButton(){
     return InkWell(
-      splashColor: AppColors.transparent,
-      highlightColor: AppColors.transparent,
-      hoverColor: AppColors.transparent,
-      focusColor: AppColors.transparent,
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddFeedScreen()));
+      onTap: () async {
+        final isSuccess = await context.read<LoginProvider>().login(_phoneController.text);
+        if(isSuccess){
+          context.read<DashboardProvider>().getHomeComponents();
+          context.read<DashboardProvider>().getCategories();
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        } else{
+          Utils.showInSnackBar(context, "Invalid Phone Number");
+        }
       },
       child: Center(
         child: Container(
@@ -103,22 +109,30 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                  "Continue",
-                  style: AppTextStyles.montserratRegular(16)
-              ),
-              CircleAvatar(
-                  maxRadius: 18,
-                  backgroundColor: AppColors.secondary,
-                  child: Icon(
-                      Icons.keyboard_arrow_right_rounded,
-                      color: AppColors.white
-                  )
-              )
-            ],
+          child: Consumer<LoginProvider>(
+              builder: (context, login, child) {
+                return login.isLoading ? Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.secondary,
+                  ),
+                ) : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        "Continue",
+                        style: AppTextStyles.montserratRegular(16)
+                    ),
+                    CircleAvatar(
+                        maxRadius: 18,
+                        backgroundColor: AppColors.secondary,
+                        child: Icon(
+                            Icons.keyboard_arrow_right_rounded,
+                            color: AppColors.white
+                        )
+                    )
+                  ],
+                );
+              }
           ),
         ),
       ),
