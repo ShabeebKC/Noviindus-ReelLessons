@@ -6,6 +6,7 @@ import 'package:reel_lessons/constants/app_resources.dart';
 import 'package:reel_lessons/constants/app_styles.dart';
 import 'package:reel_lessons/modules/dashboard/presentation/manager/dashboard_provider.dart';
 import 'package:reel_lessons/modules/dashboard/presentation/widgets/app_app_bar.dart';
+import '../../../../utils/utils.dart';
 import '../../data/models/categories_reponse.dart';
 import '../manager/add_feed_provider.dart';
 
@@ -26,17 +27,32 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
       appBar: AppAppBar(
           "Add Feeds",
           actions: [
-            Container(
-              margin: EdgeInsets.only(right: 16),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: AppColors.containerBg,
-                  border: Border.all(color: AppColors.secondary)
-              ),
-              child: Text(
-                  "Share Post",
-                  style: AppTextStyles.montserratRegular(14)
+            InkWell(
+              onTap: () async {
+                await context.read<AddFeedProvider>().uploadFeed(_descController.text).then((value) {
+                  Utils.showInSnackBar(context, value);
+                },);
+              },
+              child: Container(
+                height: 35,
+                margin: EdgeInsets.only(right: 16),
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: AppColors.containerBg,
+                    border: Border.all(color: AppColors.secondary)
+                ),
+                child: Consumer<AddFeedProvider>(
+                    builder: (context, load, child) {
+                      return load.isLoading
+                          ? Center(child: CircularProgressIndicator(color: AppColors.white))
+                          : Center(child: Text(
+                            "Share Post",
+                            style: AppTextStyles.montserratRegular(14)
+                        ),
+                      );
+                    }
+                ),
               ),
             )
       ]),
@@ -182,13 +198,13 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                   return Consumer<AddFeedProvider>(
                     builder: (context, provider, child) {
                       final Categories? item = cat.categories?.categories?[index];
-                      final bool isSelected = provider.selectedCategory.contains(item);
+                      final bool isSelected = provider.selectedCategory.contains(item?.id);
                       return InkWell(
                         onTap: (){
                           if(isSelected){
-                            context.read<AddFeedProvider>().removeCategories(item);
+                            context.read<AddFeedProvider>().removeCategories(item?.id);
                           } else {
-                            context.read<AddFeedProvider>().addCategories(item);
+                            context.read<AddFeedProvider>().addCategories(item?.id);
                           }
                         },
                         child: Container(

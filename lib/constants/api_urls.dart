@@ -6,5 +6,6 @@ class ApiUrls{
   static const String categoryList = '$baseUrl/category_list';
   static const String home = '$baseUrl/home';
   static String myFeed(int page) => '$baseUrl/my_feed?page=$page';
+  static const String myFeedPost = '$baseUrl/my_feed';
 
 }

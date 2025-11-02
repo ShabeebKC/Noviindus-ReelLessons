@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:reel_lessons/modules/dashboard/domain/entities/home_entity.dart';
 import 'package:reel_lessons/modules/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:video_player/video_player.dart';
@@ -44,5 +45,10 @@ class DashboardUseCase{
       videoControllers.add(videoController);
       chewieControllers.add(chewieController);
     }
+  }
+
+  Future<bool> uploadFeed(File videoFile, File imageFile, String desc, List<int> categories) async {
+    final isSuccess = await dashboardRepository.uploadFeed(videoFile, imageFile, desc, categories);
+    return isSuccess;
   }
 }

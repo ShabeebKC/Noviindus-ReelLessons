@@ -1,16 +1,20 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:reel_lessons/modules/dashboard/domain/use_cases/dashboard_usecase.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../utils/utils.dart';
-import '../../data/models/categories_reponse.dart';
 
 class AddFeedProvider extends ChangeNotifier{
+  final DashboardUseCase useCase;
+  AddFeedProvider(this.useCase);
+
   final ImagePicker picker = ImagePicker();
 
   File? selectedVideo;
   File? selectedImage;
-  List<Categories> selectedCategory = [];
+  List<int> selectedCategory = [];
+  bool isLoading = false;
 
   Future<void> pickVideo(BuildContext context) async {
     final pickedVideo = await picker.pickVideo(source: ImageSource.gallery);
@@ -41,15 +45,29 @@ class AddFeedProvider extends ChangeNotifier{
     }
   }
 
-  void addCategories(Categories? category){
-    if(category == null) return;
-    selectedCategory.add(category);
+  void addCategories(int? id){
+    if(id == null) return;
+    selectedCategory.add(id);
     notifyListeners();
   }
 
-  void removeCategories(Categories? category){
+  void removeCategories(int? category){
     if(category == null) return;
     selectedCategory.removeWhere((element) => element == category);
     notifyListeners();
+  }
+
+  Future<String> uploadFeed(String desc,) async {
+    isLoading = true;
+    notifyListeners();
+    if(selectedVideo == null || selectedImage == null){
+      return "No Video or Thumbnail is Selected";
+    }
+
+    final response = await useCase.uploadFeed(selectedVideo!, selectedImage!, desc, selectedCategory);
+    isLoading = false;
+    notifyListeners();
+    if(!response) return "Failed to Upload";
+    return "Feed Uploaded Successfully";
   }
 }
