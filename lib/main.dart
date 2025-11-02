@@ -9,6 +9,7 @@ import 'modules/authentication/domain/use_cases/login_usecase.dart';
 import 'modules/authentication/presentation/manager/login_provider.dart';
 import 'modules/authentication/presentation/pages/login_screen.dart';
 import 'package:provider/provider.dart';
+import 'modules/dashboard/presentation/manager/add_feed_provider.dart';
 import 'modules/profile/data/repositories/profile_repository_impl.dart';
 import 'modules/profile/domain/use_cases/profile_usecase.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginProvider(LoginUseCase(LoginRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => DashboardProvider(DashboardUseCase(DashboardRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => ProfileProvider(ProfileUseCase(ProfileRepositoryImpl()))),
+        ChangeNotifierProvider(create: (_) => AddFeedProvider()),
       ],
       child: MaterialApp(
         title: 'Reel Lessons',
