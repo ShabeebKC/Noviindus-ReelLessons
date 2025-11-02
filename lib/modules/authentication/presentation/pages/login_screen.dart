@@ -91,8 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () async {
         final isSuccess = await context.read<LoginProvider>().login(_phoneController.text);
         if(isSuccess){
-          context.read<DashboardProvider>().getHomeComponents();
-          context.read<DashboardProvider>().getCategories();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
         } else{
           Utils.showInSnackBar(context, "Invalid Phone Number");

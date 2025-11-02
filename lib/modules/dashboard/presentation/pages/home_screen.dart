@@ -10,8 +10,21 @@ import 'package:chewie/chewie.dart';
 import '../../../../utils/utils.dart';
 import '../../../profile/presentation/pages/my_feed_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    context.read<DashboardProvider>().getHomeComponents();
+    context.read<DashboardProvider>().getCategories();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +127,7 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final feed = content.homeComponents?.results[index];
               final isPlaying = content.currentPlayingIndex == index;
-          
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
