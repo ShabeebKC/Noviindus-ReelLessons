@@ -40,7 +40,7 @@ class DashboardProvider extends ChangeNotifier{
       dashboardUseCase.chewieControllers[_currentPlayingIndex!].pause();
     }
     _currentPlayingIndex = index;
-    await dashboardUseCase.videoControllers[index].initialize();
+    await getController(index).initialize();
     dashboardUseCase.chewieControllers[index].play();
     notifyListeners();
   }

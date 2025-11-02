@@ -8,6 +8,7 @@ import 'package:reel_lessons/modules/dashboard/presentation/manager/dashboard_pr
 import 'package:reel_lessons/modules/dashboard/presentation/pages/add_feed_screen.dart';
 import 'package:chewie/chewie.dart';
 import '../../../../utils/utils.dart';
+import '../../../profile/presentation/pages/my_feed_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           InkWell(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AddFeedScreen())),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedScreen())),
             child: Padding(
               padding: const EdgeInsets.only(right: 18.0),
               child: Image.asset(AppResources.user, height: 40,),
