@@ -136,25 +136,26 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                     childAspectRatio: 3
-                ), itemBuilder: (context, index) {
-                return Container(
-                  height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: AppColors.secondary,
-                        width: 0.5
+                ),
+                itemBuilder: (context, index) {
+                  return Container(
+                    height: 50,
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: AppColors.secondary,
+                          width: 0.5
+                      ),
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Center(
-                    child: Text(
-                        cat.categories?.categories?[index].title ?? "",
-                        style: AppTextStyles.montserratRegular(12)
+                    child: Center(
+                      child: Text(
+                          cat.categories?.categories?[index].title ?? "",
+                          style: AppTextStyles.montserratRegular(12)
+                      ),
                     ),
-                  ),
-                );
-              },);
+                  );
+                });
             }
         ),
       ),

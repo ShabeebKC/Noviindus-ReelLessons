@@ -27,7 +27,7 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
           !context.read<ProfileProvider>().isCompleted) {
-        context.read<ProfileProvider>().fetchMyFeeds(page);
+        context.read<ProfileProvider>().fetchMyFeeds(page++);
       }
     });
     super.initState();
@@ -44,6 +44,7 @@ class _MyFeedScreenState extends State<MyFeedScreen> {
           if (content.myFeeds.isEmpty) return const SizedBox.shrink();
 
           return ListView.separated(
+            controller: _scrollController,
             itemCount: content.myFeeds.length,
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
