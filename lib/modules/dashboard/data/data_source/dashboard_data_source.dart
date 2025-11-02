@@ -71,6 +71,8 @@ class DashboardDataSource {
     if (response.statusCode == 200 || response.statusCode == 202) {
       final jsonData = json.decode(responseBody);
       return AddFeedResponse.fromJson(jsonData);
+    } else {
+      log(responseBody);
     }
     return null;
   }
